@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from app.models.book import Book
 
 main_bp = Blueprint('main', __name__)
 
@@ -8,7 +9,9 @@ def index():
     首頁：顯示書籍清單與評分排行榜。
     邏輯：獲取所有書籍與高分排名，渲染 index.html。
     """
-    pass
+    books = Book.get_all()
+    top_books = Book.get_all(sort_by_rating=True)
+    return render_template('index.html', books=books, top_books=top_books)
 
 @main_bp.route('/search')
 def search():
@@ -17,4 +20,9 @@ def search():
     參數：q (str) - 搜尋關鍵字。
     邏輯：呼叫搜尋方法，渲染 search.html。
     """
-    pass
+    keyword = request.args.get('q', '')
+    if not keyword:
+        results = []
+    else:
+        results = Book.search(keyword)
+    return render_template('search.html', results=results, keyword=keyword)

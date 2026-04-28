@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}讀書筆記本{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #f3f4f6;
+            --accent-color: #fbbf24;
+            --text-dark: #1f2937;
+        }
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f9fafb;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            letter-spacing: -0.025em;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-1px);
+        }
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        footer {
+            margin-top: auto;
+            padding: 2rem 0;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            color: #6b7280;
+        }
+        .flash-messages {
+            margin-top: 1rem;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">📚 讀書筆記本</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <form class="d-flex me-3" action="{{ url_for('main.search') }}" method="GET">
+                            <input class="form-control me-2" type="search" name="q" placeholder="搜尋書名或心得..." required>
+                            <button class="btn btn-outline-primary" type="submit">搜尋</button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{{ url_for('books.add') }}">新增筆記</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Reading Notebook. 一起記錄閱讀的感動。</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

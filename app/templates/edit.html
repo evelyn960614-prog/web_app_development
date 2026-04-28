@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}編輯筆記 - {{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h2 class="fw-bold mb-4">編輯閱讀筆記</h2>
+            <form action="{{ url_for('books.edit', id=book.id) }}" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label fw-semibold">書名 <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}" required>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="author" class="form-label fw-semibold">作者 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="author" name="author" value="{{ book.author }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="reading_date" class="form-label fw-semibold">閱讀日期</label>
+                        <input type="date" class="form-control" id="reading_date" name="reading_date" value="{{ book.reading_date }}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="rating" class="form-label fw-semibold">評分 <span class="text-danger">*</span></label>
+                    <select class="form-select" id="rating" name="rating" required>
+                        <option value="5" {% if book.rating == 5 %}selected{% endif %}>⭐⭐⭐⭐⭐ (極力推薦)</option>
+                        <option value="4" {% if book.rating == 4 %}selected{% endif %}>⭐⭐⭐⭐ (非常喜歡)</option>
+                        <option value="3" {% if book.rating == 3 %}selected{% endif %}>⭐⭐⭐ (值得一讀)</option>
+                        <option value="2" {% if book.rating == 2 %}selected{% endif %}>⭐⭐ (普普通通)</option>
+                        <option value="1" {% if book.rating == 1 %}selected{% endif %}>⭐ (不推薦)</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="note" class="form-label fw-semibold">讀後感 / 心得</label>
+                    <textarea class="form-control" id="note" name="note" rows="6">{{ book.note }}</textarea>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ url_for('books.detail', id=book.id) }}" class="btn btn-light px-4 me-md-2">取消</a>
+                    <button type="submit" class="btn btn-primary px-5">儲存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

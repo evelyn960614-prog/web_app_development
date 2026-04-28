@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - 詳情{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首頁</a></li>
+                <li class="breadcrumb-item active">{{ book.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="card p-5">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h1 class="fw-bold mb-1">{{ book.title }}</h1>
+                    <p class="text-muted fs-5">作者：{{ book.author }}</p>
+                </div>
+                <div class="text-end">
+                    <div class="text-warning fs-3 mb-2">
+                        {% for _ in range(book.rating) %}★{% endfor %}
+                    </div>
+                    <span class="badge bg-light text-dark border p-2">閱讀日期：{{ book.reading_date or '未記錄' }}</span>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="note-content">
+                <h4 class="fw-bold mb-3">閱讀心得</h4>
+                <div class="fs-5 lh-lg text-secondary" style="white-space: pre-wrap;">
+                    {{ book.note or '尚未填寫心得。' }}
+                </div>
+            </div>
+
+            <div class="mt-5 pt-4 border-top d-flex justify-content-between align-items-center">
+                <div class="text-muted small">建立於：{{ book.created_at }}</div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('books.edit', id=book.id) }}" class="btn btn-outline-secondary px-4">編輯內容</a>
+                    <form action="{{ url_for('books.delete', id=book.id) }}" method="POST" onsubmit="return confirm('確定要刪除這本筆記嗎？此操作無法還原。');">
+                        <button type="submit" class="btn btn-danger px-4">刪除筆記</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}搜尋結果 - {{ keyword }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold">搜尋結果</h2>
+        <p class="text-muted">關鍵字：「{{ keyword }}」，共找到 {{ results|length }} 筆資料。</p>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for book in results %}
+    <div class="col">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="badge bg-light text-primary">{{ book.reading_date or '未知日期' }}</span>
+                    <div class="text-warning small">
+                        {% for _ in range(book.rating) %}★{% endfor %}
+                    </div>
+                </div>
+                <h5 class="card-title fw-bold">{{ book.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                <p class="card-text text-truncate mt-3">{{ book.note or '尚未撰寫心得...' }}</p>
+                <a href="{{ url_for('books.detail', id=book.id) }}" class="btn btn-link text-primary p-0 fw-semibold">查看詳情 &rarr;</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="p-5 bg-white rounded-4 shadow-sm">
+            <h5 class="text-muted">找不到符合「{{ keyword }}」的筆記。</h5>
+            <p>請嘗試其他關鍵字，或是 <a href="{{ url_for('books.add') }}">新增一筆筆記</a>。</p>
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary mt-3">回到首頁</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
